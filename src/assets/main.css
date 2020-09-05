@@ -1,3 +1,17 @@
+:root {
+  --back: #14202c;
+  --back-light: #253341;
+  --primary: #00abe7ff;
+  --accent: rgb(224, 36, 94);
+  --danger: #e74c3cff;
+  --secondary: rgb(23, 191, 99);
+  color: white;
+}
+
+.light {
+  --back: white;
+}
+
 @tailwind base;
 
 @tailwind components;
