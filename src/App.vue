@@ -2,12 +2,15 @@
   <div id="app" class="bg-back-500">
     <header class="bg-back-300 border-b-2 border-white flex">
       <h1 class="m-auto text-center">
-        TP SYSR
-        <button @click="testIPC">test</button>
+        TP SYSR: KOURTA-BENABED
       </h1>
     </header>
     <div class="insideGrid">
-      <ProcessState v-for="process in processes" :key="process.id" :process="process"></ProcessState>
+      <ProcessState
+        v-for="process in processes"
+        :key="process.id"
+        :process="process"
+      ></ProcessState>
     </div>
     <!-- <footer class=" bg-back-300"></footer> -->
   </div>
@@ -20,17 +23,17 @@ import { PROCESS_NUMBER } from "./constants";
 export default {
   name: "App",
   components: {
-    ProcessState
+    ProcessState,
   },
   data() {
     return {
-      processes: []
+      processes: [],
     };
   },
   methods: {
     testIPC() {
       ipcRenderer.send("getInfo", "ping");
-    }
+    },
   },
   mounted() {
     for (let index = 0; index < PROCESS_NUMBER; index++) {
@@ -39,7 +42,7 @@ export default {
         clock: null,
         insideCritical: null,
         waiting: [],
-        deferred: []
+        deferred: [],
       });
     }
     ipcRenderer.on("info", (event, data) => {
@@ -51,7 +54,7 @@ export default {
       console.log(data);
       this.processes[data.id].state = false;
     });
-  }
+  },
 };
 </script>
 
