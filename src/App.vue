@@ -1,16 +1,13 @@
 <template>
-  <div id="app" class=" bg-back-500">
-    <header class=" bg-back-300 border-b-2 border-white flex">
-      <h1 class=" m-auto text-center">
-        TP SYSR <button @click="testIPC">test</button>
+  <div id="app" class="bg-back-500">
+    <header class="bg-back-300 border-b-2 border-white flex">
+      <h1 class="m-auto text-center">
+        TP SYSR
+        <button @click="testIPC">test</button>
       </h1>
     </header>
     <div class="insideGrid">
-      <ProcessState
-        v-for="process in processes"
-        :key="process.id"
-        :process="process"
-      ></ProcessState>
+      <ProcessState v-for="process in processes" :key="process.id" :process="process"></ProcessState>
     </div>
     <!-- <footer class=" bg-back-300"></footer> -->
   </div>
@@ -38,7 +35,7 @@ export default {
   mounted() {
     for (let index = 0; index < PROCESS_NUMBER; index++) {
       this.processes.push({
-        id: null,
+        id: index,
         clock: null,
         insideCritical: null,
         waiting: [],

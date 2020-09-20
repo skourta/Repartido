@@ -1,5 +1,6 @@
 "use strict";
 const net = require("net");
+const { spawn } = require("child_process");
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
@@ -47,6 +48,9 @@ async function createWindow() {
 app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
+  spawn(`killall`, ["TP_SYSR"], {
+    detached: true,
+  });
   if (process.platform !== "darwin") {
     app.quit();
   }
@@ -73,6 +77,22 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+});
+
+ipcMain.on("kill", (event, arg) => {
+  console.log(`kill : ${arg}`); // affiche "ping"
+  sendMessage(parseInt(arg), `die,${arg}`);
+  event.returnValue = `killed :${arg}`;
+});
+
+ipcMain.on("revive", (event, arg) => {
+  console.log(`revive : ${arg}`); // affiche "ping"
+  // sendMessage(-1, `revive,${arg}`);
+  spawn(`./src/TP_SYSR`, [arg], {
+    detached: true,
+  });
+
+  event.returnValue = `revived :${arg}`;
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -132,6 +152,9 @@ function checkIfAlive(toId) {
     win.webContents.send("info", process);
 
     client.destroy(); // kill client after server's response
+  });
+  client.on("connect", function(data) {
+    console.log(toId + "alive");
   });
 
   client.on("error", () => {
